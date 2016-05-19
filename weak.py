@@ -48,8 +48,9 @@ for root, dirs, files in walk(work):
                         if word.lower() == bad_word.lower():
                             cat_name = category.upper()
                             start = index - env
-                            short_line = ' '.join(words[start if start >= 0 else 0:index + env])
-                            print '{} [{}:{}] {} ({}) => {}'.format(s_path, number, index, cat_name,
+                            short_line = ' '.join(words[start if start >= 0 else 0:index + env + 1])
+                            w_index = index + 1
+                            print '{} [{}:{}] {} ({}) => {}'.format(s_path, number, w_index, cat_name,
                                                                     bad_word, short_line)
 
 # Go out
