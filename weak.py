@@ -35,6 +35,9 @@ for jsonFile in [join(langDir, name) for name in listdir(langDir)]:
         print ' Loaded {} entries from "{}"...'.format(len(doc), cat)
 
 # Process input
+file_total = 0
+all_total = 0
+bad_total = 0
 for root, dirs, files in walk(work):
     for f in files:
         if not f.endswith('.' + ext):
@@ -43,9 +46,11 @@ for root, dirs, files in walk(work):
         s_path = f_path.replace(work + sep, '')
         all_count = 0
         bad_count = 0
+        file_total += 1
         for number, line in enumerate(open(f_path, mode='rU')):
             words = line.split()
             all_count += len(words)
+            all_total += len(words)
             for index, word in enumerate(words):
                 is_bad = False
                 for category, bad_words in categories.iteritems():
@@ -61,9 +66,13 @@ for root, dirs, files in walk(work):
                                                                     bad_word, short_line)
                 if is_bad:
                     bad_count += 1
+        bad_total += bad_count
         bad_perf = int((bad_count * 1.0 / all_count * 1.0) * 100 * 100) / 100.0
         print ' Found {} from {} words harmful ({} %) in "{}"!'.format(bad_count, all_count,
                                                                        bad_perf, s_path)
+total_perf = int((bad_total * 1.0 / all_total * 1.0) * 100 * 100) / 100.0
+print ' Found {} from {} words in {} files harmful ({} %)'.format(bad_total, all_total,
+                                                                  file_total, total_perf)
 
 # Go out
 exit(0)
